@@ -7,7 +7,6 @@ public class QuickSortExample {
         sort(list, 0, list.size() - 1);
     }
 
-
     private static <T extends Comparable<? super T>> void sort(List<T> list, int low, int high) {
         if (low < high) {
             int pi = partition(list, low, high);
@@ -21,15 +20,15 @@ public class QuickSortExample {
         for (int j = low; j < high; j++) {
             if (list.get(j).compareTo(list.get(high)) < 0) {
                 i++;
-                T tempt = list.get(i);
+                T temp = list.get(i);
                 list.set(i, list.get(j));
-                list.set(j, tempt);
+                list.set(j, temp);
             }
         }
 
-        T tempt = list.get(i + 1);
+        T temp = list.get(i + 1);
         list.set(i + 1, list.get(high));
-        list.set(high, tempt);
+        list.set(high, temp);
         return i + 1;
     }
 }
