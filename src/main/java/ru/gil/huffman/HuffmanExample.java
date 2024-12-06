@@ -1,4 +1,4 @@
-package ru.gil.qucksort.huffman;
+package ru.gil.huffman;
 
 
 import java.util.*;
@@ -6,29 +6,38 @@ import java.util.stream.Collectors;
 
 public class HuffmanExample {
 
-    private final String message;
-    private Map<String, StringBuilder> map = new HashMap<>();
-
-    public HuffmanExample(String message) {
-        this.message = message;
-    }
+    private Map<Character, StringBuilder> mapHuffmanCode = new HashMap<>();
+    private Map<String, Character> mapHuffmanDecode = new HashMap<>();
+    private static final char ZERO = '0';
+    private static final char ONE = '1';
 
 
-    public String code() {
-        setupCodeHuffman();
+    public String code(String message) {
+        setupCodeHuffman(message);
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < message.length(); i++) {
-            sb.append(map.get(String.valueOf(message.charAt(i))));
+            sb.append(mapHuffmanCode.get(message.charAt(i)));
         }
         return sb.toString();
     }
 
-    private void setupCodeHuffman() {
+    public String decode(String code) {
+        int start = 0;
+        int end = 1;
+        StringBuilder sb = new StringBuilder(code);
+        while (sb.length() != 0) {
+            String subSb = sb.substring(start, end);
+
+        }
+        return null;
+    }
+
+    private void setupCodeHuffman(String message) {
         Map<Character, Integer> frequencies = getFrequencies(message);
         PriorityQueue<Sheet> queue = getQueueSheet(frequencies);
         List<Sheet> listSheet = queue.stream().toList();
         Sheet three = getThree(queue);
-        map = getCodeHuffman(three, listSheet);
+        mapHuffmanCode = getCodeHuffman(three, listSheet);
     }
 
     private Map<Character, Integer> getFrequencies(String data) {
@@ -63,12 +72,13 @@ public class HuffmanExample {
         return queue.remove();
     }
 
-    private Map<String, StringBuilder> getCodeHuffman(Sheet three, List<Sheet> listSheet) {
+    private Map<Character, StringBuilder> getCodeHuffman(Sheet three, List<Sheet> listSheet) {
         Sheet sheet;
-        Map<String, StringBuilder> mapHuffman = new HashMap<>();
+        Map<Character, StringBuilder> mapHuffmanCode = new HashMap<>();
+        Map<String, Character> mapHuffmanDecode = new HashMap<>();
         if (listSheet.size() == 1 && three.leftChild == null && three.rightChild == null) {
-            mapHuffman.put(listSheet.get(0).letter.toString(), new StringBuilder().append('0'));
-            return mapHuffman;
+            mapHuffmanCode.put(listSheet.get(0).letter.charAt(0), new StringBuilder().append(ZERO));
+            return mapHuffmanCode;
         }
         for (int i = listSheet.size() - 1; i >= 0; i--) {
             sheet = three;
@@ -78,15 +88,17 @@ public class HuffmanExample {
                     break;
                 } else if (sheet.leftChild.letter.toString().contains(listSheet.get(i).letter)) {
                     sheet = sheet.leftChild;
-                    code.append('0');
+                    code.append(ZERO);
                 } else if (sheet.rightChild.letter.toString().contains(listSheet.get(i).letter)) {
                     sheet = sheet.rightChild;
-                    code.append('1');
+                    code.append(ONE);
                 }
             }
-            mapHuffman.put(listSheet.get(i).letter.toString(), code);
+            mapHuffmanCode.put(listSheet.get(i).letter.charAt(0), code);
+            mapHuffmanDecode.put(code.toString(), listSheet.get(i).letter.charAt(0));
         }
-        return mapHuffman;
+        this.mapHuffmanDecode = mapHuffmanDecode;
+        return mapHuffmanCode;
     }
 
     private static class Sheet implements Comparable<Sheet> {
