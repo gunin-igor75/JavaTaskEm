@@ -101,7 +101,7 @@ public class HuffmanExample {
         return mapHuffmanCode;
     }
 
-    static class Sheet implements Comparable<Sheet> {
+    class Sheet implements Comparable<Sheet> {
         private final Integer value;
         private final StringBuilder letter;
         private final Sheet leftChild;
