@@ -25,9 +25,9 @@ public class HuffmanExample {
         int start = 0;
         int end = 1;
         StringBuilder sb = new StringBuilder(code);
-        while (sb.length() != 0) {
+        while (!sb.isEmpty()) {
             String subSb = sb.substring(start, end);
-
+            // TODO realisation decode
         }
         return null;
     }
@@ -101,7 +101,7 @@ public class HuffmanExample {
         return mapHuffmanCode;
     }
 
-    private static class Sheet implements Comparable<Sheet> {
+    private class Sheet implements Comparable<Sheet> {
         private final Integer value;
         private final StringBuilder letter;
         private final Sheet leftChild;
