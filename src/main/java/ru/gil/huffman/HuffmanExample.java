@@ -1,16 +1,18 @@
 package ru.gil.huffman;
 
-
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.stream.Collectors;
 
 public class HuffmanExample {
-
-    private Map<Character, StringBuilder> mapHuffmanCode = new HashMap<>();
-    private Map<String, Character> mapHuffmanDecode = new HashMap<>();
-    private static final char ZERO = '0';
-    private static final char ONE = '1';
-
+    private final Map<Character, StringBuilder> mapHuffmanCode = new HashMap<>();
+    private final Map<String, Character> mapHuffmanDecode = new HashMap<>();
+    private final char ZERO = '0';
+    private final char ONE = '1';
+    private final int START_STRING = 0;
+    private String EMPTY = "";
 
     public String code(String message) {
         setupCodeHuffman(message);
@@ -22,14 +24,20 @@ public class HuffmanExample {
     }
 
     public String decode(String code) {
-        int start = 0;
         int end = 1;
         StringBuilder sb = new StringBuilder(code);
+        StringBuilder ans = new StringBuilder();
         while (!sb.isEmpty()) {
-            String subSb = sb.substring(start, end);
-            // TODO realisation decode
+            String currentKey = sb.substring(START_STRING, end);
+            if (mapHuffmanDecode.containsKey(currentKey)) {
+                ans.append(mapHuffmanDecode.get(currentKey));
+                sb.replace(START_STRING, end, EMPTY);
+                end = 1;
+            } else {
+                end++;
+            }
         }
-        return null;
+        return ans.toString();
     }
 
     private void setupCodeHuffman(String message) {
@@ -37,7 +45,7 @@ public class HuffmanExample {
         PriorityQueue<Sheet> queue = getQueueSheet(frequencies);
         List<Sheet> listSheet = queue.stream().toList();
         Sheet three = getThree(queue);
-        mapHuffmanCode = getCodeHuffman(three, listSheet);
+        createMapsCodeHuffman(three, listSheet);
     }
 
     private Map<Character, Integer> getFrequencies(String data) {
@@ -72,13 +80,12 @@ public class HuffmanExample {
         return queue.remove();
     }
 
-    private Map<Character, StringBuilder> getCodeHuffman(Sheet three, List<Sheet> listSheet) {
+    private void createMapsCodeHuffman(Sheet three, List<Sheet> listSheet) {
         Sheet sheet;
-        Map<Character, StringBuilder> mapHuffmanCode = new HashMap<>();
-        Map<String, Character> mapHuffmanDecode = new HashMap<>();
         if (listSheet.size() == 1 && three.leftChild == null && three.rightChild == null) {
             mapHuffmanCode.put(listSheet.get(0).letter.charAt(0), new StringBuilder().append(ZERO));
-            return mapHuffmanCode;
+            mapHuffmanDecode.put(String.valueOf(ZERO), listSheet.get(0).letter.charAt(0));
+            return;
         }
         for (int i = listSheet.size() - 1; i >= 0; i--) {
             sheet = three;
@@ -97,11 +104,9 @@ public class HuffmanExample {
             mapHuffmanCode.put(listSheet.get(i).letter.charAt(0), code);
             mapHuffmanDecode.put(code.toString(), listSheet.get(i).letter.charAt(0));
         }
-        this.mapHuffmanDecode = mapHuffmanDecode;
-        return mapHuffmanCode;
     }
 
-    class Sheet implements Comparable<Sheet> {
+    private static class Sheet implements Comparable<Sheet> {
         private final Integer value;
         private final StringBuilder letter;
         private final Sheet leftChild;
