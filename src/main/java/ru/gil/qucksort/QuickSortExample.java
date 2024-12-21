@@ -31,10 +31,4 @@ public class QuickSortExample {
         list.set(high, temp);
         return i + 1;
     }
-
-    private static <T extends Comparable<? super T>> void swap(T[] arr, int i, int j) {
-        T temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
-    }
 }
