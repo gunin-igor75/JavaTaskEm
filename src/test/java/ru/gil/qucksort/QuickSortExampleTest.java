@@ -15,12 +15,12 @@ public class QuickSortExampleTest {
     @TestFactory
     Collection<DynamicTest> testQuickSort() {
         List<List<Integer>> lists = List.of(
-                Arrays.asList(4, 0, 1, 2, 3, -1),
-                Arrays.asList(1, 0, 4, 2, -1, 3),
-                Arrays.asList(2, 3, 1, 4, 0, -1)
+                Arrays.asList(null,4, 0, 1,null, 2, 3, -1),
+                Arrays.asList(1, 0, 4, 2, -1, 3, null, null),
+                Arrays.asList(null, null, 2, 3, 1, 4, 0, -1)
         );
 
-        List<Integer> expected = List.of(-1, 0, 1, 2, 3, 4);
+        List<Integer> expected = Arrays.asList(-1, 0, 1, 2, 3, 4, null, null);
         return lists.stream()
                 .map(list ->
                         DynamicTest.dynamicTest(
