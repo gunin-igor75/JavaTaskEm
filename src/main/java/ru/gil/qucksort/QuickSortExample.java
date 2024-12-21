@@ -18,7 +18,10 @@ public class QuickSortExample {
     private static <T extends Comparable<? super T>> int partition(List<T> list, int low, int high) {
         int i = (low - 1);
         for (int j = low; j < high; j++) {
-            if (list.get(j) != null && list.get(high) != null &&  list.get(j).compareTo(list.get(high)) < 0) {
+            if (list.get(j) == null || list.get(high) == null) {
+                throw new IllegalArgumentException("Elements must be non null");
+            }
+            if (list.get(j).compareTo(list.get(high)) < 0) {
                 i++;
                 T temp = list.get(i);
                 list.set(i, list.get(j));
